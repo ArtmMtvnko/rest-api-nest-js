@@ -1,7 +1,9 @@
+import { UUID } from 'crypto'
+
 export interface Blog {
-    ID: string
+    ID: UUID
     title: string
     content: string
     likes: number
-    userID: string
+    userID: UUID
 }
