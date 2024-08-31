@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { Blog } from './entities/blog.entity'
 import { blogsStorage } from 'src/storage/blogs.storage'
 import { CreateBlogDto } from './dto/create-blog.dto'
@@ -33,6 +33,10 @@ export class BlogService {
 
     async update(id: string, updateBlogDto: UpdateBlogDto) {
         const oldBlog = blogsStorage.blogs.find(blog => blog.ID === id)
+
+        if (!oldBlog) {
+            throw new NotFoundException(`Blog with id '${id}' was not found`)
+        }
 
         const updatedBlog: Blog = {
             ...oldBlog,
