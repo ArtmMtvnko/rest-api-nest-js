@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { Blog } from '../entities/blog.entity'
 
-export class CreateBlogDto {
+export class CreateBlogDto implements Omit<Blog, 'id' | 'authorId' | 'likes'> {
     @ApiProperty({
         description: 'Header of a blog',
         example: 'Vacation in Cyprus',
@@ -20,5 +21,5 @@ export class CreateBlogDto {
         example: '9173ccac-7a49-40d8-8bb5-6bbbf9b78960',
         required: true
     })
-    userID: string
+    authorId: string
 }

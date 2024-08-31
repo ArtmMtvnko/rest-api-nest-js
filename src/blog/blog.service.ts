@@ -12,12 +12,12 @@ export class BlogService {
     }
 
     async findUnique(id: string): Promise<Blog | undefined> {
-        return blogsStorage.blogs.find(blog => blog.ID === id)
+        return blogsStorage.blogs.find(blog => blog.id === id)
     }
 
     async create(createBlogDto: CreateBlogDto): Promise<Blog> {
         const blog: Blog = {
-            ID: uuid(),
+            id: uuid(),
             likes: 0,
             ...createBlogDto,
         }
@@ -28,11 +28,11 @@ export class BlogService {
     }
 
     async delete(id: string): Promise<void> {
-        blogsStorage.blogs = blogsStorage.blogs.filter(blog => blog.ID !== id)
+        blogsStorage.blogs = blogsStorage.blogs.filter(blog => blog.id !== id)
     }
 
     async update(id: string, updateBlogDto: UpdateBlogDto) {
-        const oldBlog = blogsStorage.blogs.find(blog => blog.ID === id)
+        const oldBlog = blogsStorage.blogs.find(blog => blog.id === id)
 
         if (!oldBlog) {
             throw new NotFoundException(`Blog with id '${id}' was not found`)
@@ -44,7 +44,7 @@ export class BlogService {
         }
 
         blogsStorage.blogs = blogsStorage.blogs.map(blog =>
-            blog.ID === id ? updatedBlog : blog,
+            blog.id === id ? updatedBlog : blog,
         )
 
         return updatedBlog

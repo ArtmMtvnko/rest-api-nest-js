@@ -1,6 +1,3 @@
-export interface User {
-    ID: string
-    username: string
-    name: string
-    // blogsID: string[]
-}
+import { User as UserPrisma } from '@prisma/client'
+
+export interface User extends UserPrisma {}

@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { User } from '../entities/user.entity'
 
-export class CreateUserDto {
+export class CreateUserDto implements Omit<User, 'id'> {
     @ApiProperty({
         description: 'Username which identifies user',
         example: 'jhon_jhonshon42',
