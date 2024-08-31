@@ -14,8 +14,10 @@ import { UUID } from 'crypto'
 import { Blog } from './entities/blog.entity'
 import { CreateBlogDto } from './dto/create-blog.dto'
 import { UpdateBlogDto } from './dto/update-blog.dto'
+import { ApiParam, ApiTags } from '@nestjs/swagger'
 
 @Controller('blog')
+@ApiTags('Blogs')
 export class BlogController {
     private readonly blogService: BlogService
 
