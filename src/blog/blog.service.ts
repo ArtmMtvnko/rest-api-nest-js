@@ -1,52 +1,37 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { Blog } from './entities/blog.entity'
-import { blogsStorage } from 'src/storage/blogs.storage'
 import { CreateBlogDto } from './dto/create-blog.dto'
-import { v4 as uuid } from 'uuid'
 import { UpdateBlogDto } from './dto/update-blog.dto'
+import { PrismaService } from 'src/prisma.service'
 
 @Injectable()
 export class BlogService {
-    async findAll(): Promise<Blog[]> {
-        return blogsStorage.blogs
+    private readonly prisma: PrismaService
+
+    constructor(prisma: PrismaService) {
+        this.prisma = prisma
     }
 
-    async findUnique(id: string): Promise<Blog | undefined> {
-        return blogsStorage.blogs.find(blog => blog.id === id)
+    async findAll(): Promise<Blog[]> {
+        return await this.prisma.blog.findMany()
+    }
+
+    async findUnique(id: string): Promise<Blog | null> {
+        return await this.prisma.blog.findUnique({ where: { id } })
     }
 
     async create(createBlogDto: CreateBlogDto): Promise<Blog> {
-        const blog: Blog = {
-            id: uuid(),
-            likes: 0,
-            ...createBlogDto,
-        }
-
-        blogsStorage.blogs = [...blogsStorage.blogs, blog]
-
-        return blog
+        return await this.prisma.blog.create({ data: createBlogDto })
     }
 
     async delete(id: string): Promise<void> {
-        blogsStorage.blogs = blogsStorage.blogs.filter(blog => blog.id !== id)
+        await this.prisma.blog.delete({ where: { id } })
     }
 
-    async update(id: string, updateBlogDto: UpdateBlogDto) {
-        const oldBlog = blogsStorage.blogs.find(blog => blog.id === id)
-
-        if (!oldBlog) {
-            throw new NotFoundException(`Blog with id '${id}' was not found`)
-        }
-
-        const updatedBlog: Blog = {
-            ...oldBlog,
-            ...updateBlogDto,
-        }
-
-        blogsStorage.blogs = blogsStorage.blogs.map(blog =>
-            blog.id === id ? updatedBlog : blog,
-        )
-
-        return updatedBlog
+    async update(id: string, updateBlogDto: UpdateBlogDto): Promise<Blog> {
+        return await this.prisma.blog.update({
+            where: { id },
+            data: updateBlogDto,
+        })
     }
 }

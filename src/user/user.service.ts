@@ -1,51 +1,37 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { User } from './entities/user.entity'
-import { usersStorage } from 'src/storage/users.storage'
-import { v4 as uuid } from 'uuid'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
+import { PrismaService } from 'src/prisma.service'
 
 @Injectable()
 export class UserService {
+    private readonly prisma: PrismaService
+
+    constructor(prisma: PrismaService) {
+        this.prisma = prisma
+    }
+    
     async findAll(): Promise<User[]> {
-        return usersStorage.users
+        return await this.prisma.user.findMany()
     }
 
-    async findUnique(id: string): Promise<User | undefined> {
-        return usersStorage.users.find(user => user.ID === id)
+    async findUnique(id: string): Promise<User | null> {
+        return await this.prisma.user.findUnique({ where: { id } })
     }
 
     async create(createUserDto: CreateUserDto): Promise<User> {
-        const user: User = {
-            ID: uuid(),
-            ...createUserDto,
-        }
-
-        usersStorage.users = [...usersStorage.users, user]
-
-        return user
+        return await this.prisma.user.create({ data: createUserDto })
     }
 
     async delete(id: string): Promise<void> {
-        usersStorage.users = usersStorage.users.filter(user => user.ID !== id)
+        await this.prisma.user.delete({ where: { id } })
     }
 
     async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-        const oldUser = usersStorage.users.find(user => user.ID === id)
-
-        if (!oldUser) {
-            throw new NotFoundException(`User with id '${id}' was not found`)
-        }
-
-        const updatedUser: User = {
-            ...oldUser,
-            ...updateUserDto,
-        }
-
-        usersStorage.users = usersStorage.users.map(user =>
-            user.ID === id ? updatedUser : user,
-        )
-
-        return updatedUser
+        return await this.prisma.user.update({
+            where: { id },
+            data: updateUserDto
+        })
     }
 }
