@@ -16,7 +16,7 @@ import { CreateBlogDto } from './dto/create-blog.dto'
 import { UpdateBlogDto } from './dto/update-blog.dto'
 import { ApiParam, ApiTags } from '@nestjs/swagger'
 
-@Controller('blog')
+@Controller('blogs')
 @ApiTags('Blogs')
 export class BlogController {
     private readonly blogService: BlogService
@@ -31,6 +31,7 @@ export class BlogController {
     }
 
     @Get(':id')
+    @ApiParam({ name: 'id', example: '1d5ec66c-3a99-4647-8b8d-951544a5471e' })
     async findUnique(@Param('id') id: UUID): Promise<Blog> {
         const blog = await this.blogService.findUnique(id)
 
@@ -48,11 +49,13 @@ export class BlogController {
 
     @Delete(':id')
     @HttpCode(204)
+    @ApiParam({ name: 'id', example: '1d5ec66c-3a99-4647-8b8d-951544a5471e' })
     async delete(@Param('id') id: string): Promise<void> {
         await this.blogService.delete(id)
     }
 
     @Put(':id')
+    @ApiParam({ name: 'id', example: '1d5ec66c-3a99-4647-8b8d-951544a5471e' })
     async update(
         @Param('id') id: string,
         @Body() body: UpdateBlogDto,
