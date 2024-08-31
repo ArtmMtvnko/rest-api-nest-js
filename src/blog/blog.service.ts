@@ -1,15 +1,48 @@
 import { Injectable } from '@nestjs/common'
 import { Blog } from './entities/blog.entity'
 import { blogsStorage } from 'src/storage/blogs.storage'
-import { UUID } from 'crypto'
+import { CreateBlogDto } from './dto/create-blog.dto'
+import { v4 as uuid } from 'uuid'
+import { UpdateBlogDto } from './dto/update-blog.dto'
 
 @Injectable()
 export class BlogService {
     async findAll(): Promise<Blog[]> {
-        return blogsStorage
+        return blogsStorage.blogs
     }
 
-    async findUnique(id: UUID): Promise<Blog | undefined> {
-        return blogsStorage.find(blog => blog.ID === id)
+    async findUnique(id: string): Promise<Blog | undefined> {
+        return blogsStorage.blogs.find(blog => blog.ID === id)
+    }
+
+    async create(createBlogDto: CreateBlogDto): Promise<Blog> {
+        const blog: Blog = {
+            ID: uuid(),
+            likes: 0,
+            ...createBlogDto,
+        }
+
+        blogsStorage.blogs = [...blogsStorage.blogs, blog]
+
+        return blog
+    }
+
+    async delete(id: string): Promise<void> {
+        blogsStorage.blogs = blogsStorage.blogs.filter(blog => blog.ID !== id)
+    }
+
+    async update(id: string, updateBlogDto: UpdateBlogDto) {
+        const oldBlog = blogsStorage.blogs.find(blog => blog.ID === id)
+
+        const updatedBlog: Blog = {
+            ...oldBlog,
+            ...updateBlogDto,
+        }
+
+        blogsStorage.blogs = blogsStorage.blogs.map(blog =>
+            blog.ID === id ? updatedBlog : blog,
+        )
+
+        return updatedBlog
     }
 }

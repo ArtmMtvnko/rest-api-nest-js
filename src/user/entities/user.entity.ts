@@ -1,8 +1,6 @@
-import { UUID } from 'crypto'
-
 export interface User {
-    ID: UUID
+    ID: string
     username: string
     name: string
-    // blogsID: UUID[]
+    // blogsID: string[]
 }

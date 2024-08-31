@@ -23,7 +23,8 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     'no-unused-vars': 'off',
     'eol-last': ['error', 'always'],
-    quotes: ['error', 'single'],
+    'quotes': ['error', 'single'],
+    'no-trailing-spaces': "error",
     'prettier/prettier': [
       'error',
       {
