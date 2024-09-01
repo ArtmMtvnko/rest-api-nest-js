@@ -4,7 +4,6 @@ import {
     Delete,
     Get,
     HttpCode,
-    NotFoundException,
     Param,
     Post,
     Put,
@@ -32,13 +31,7 @@ export class UserController {
     @Get(':id')
     @ApiParam({ name: 'id', example: '9173ccac-7a49-40d8-8bb5-6bbbf9b78960' })
     async findUnique(@Param('id') id: string): Promise<User> {
-        const user = await this.userService.findUnique(id)
-
-        if (!user) {
-            throw new NotFoundException(`User with id '${id}' was not found`)
-        }
-
-        return user
+        return await this.userService.findUnique(id)
     }
 
     @Post()

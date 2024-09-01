@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common'
 import { Blog } from './entities/blog.entity'
 import { CreateBlogDto } from './dto/create-blog.dto'
 import { UpdateBlogDto } from './dto/update-blog.dto'
@@ -16,8 +16,14 @@ export class BlogService {
         return await this.repository.findAll()
     }
 
-    async findUnique(id: string): Promise<Blog | null> {
-        return await this.repository.findUnique(id)
+    async findUnique(id: string): Promise<Blog> {
+        const blog = await this.repository.findUnique(id)
+
+        if (!blog) {
+            throw new NotFoundException(`Blog with id '${id}' was not found`)
+        }
+
+        return blog
     }
 
     async create(createBlogDto: CreateBlogDto): Promise<Blog> {

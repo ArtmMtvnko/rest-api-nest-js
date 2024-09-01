@@ -4,7 +4,6 @@ import {
     Delete,
     Get,
     HttpCode,
-    NotFoundException,
     Param,
     Post,
     Put,
@@ -32,13 +31,7 @@ export class BlogController {
     @Get(':id')
     @ApiParam({ name: 'id', example: '1d5ec66c-3a99-4647-8b8d-951544a5471e' })
     async findUnique(@Param('id') id: string): Promise<Blog> {
-        const blog = await this.blogService.findUnique(id)
-
-        if (!blog) {
-            throw new NotFoundException(`Blog with id '${id}' was not found`)
-        }
-
-        return blog
+        return await this.blogService.findUnique(id)
     }
 
     @Post()
