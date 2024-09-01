@@ -2,36 +2,33 @@ import { Injectable } from '@nestjs/common'
 import { User } from './entities/user.entity'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
-import { PrismaService } from 'src/prisma.service'
+import { UserRepository } from './user.repository'
 
 @Injectable()
 export class UserService {
-    private readonly prisma: PrismaService
+    private readonly repository: UserRepository
 
-    constructor(prisma: PrismaService) {
-        this.prisma = prisma
+    constructor(repository: UserRepository) {
+        this.repository = repository
     }
     
     async findAll(): Promise<User[]> {
-        return await this.prisma.user.findMany()
+        return await this.repository.findAll()
     }
 
     async findUnique(id: string): Promise<User | null> {
-        return await this.prisma.user.findUnique({ where: { id } })
+        return await this.repository.findUnique(id)
     }
 
     async create(createUserDto: CreateUserDto): Promise<User> {
-        return await this.prisma.user.create({ data: createUserDto })
+        return await this.repository.create(createUserDto)
     }
 
     async delete(id: string): Promise<void> {
-        await this.prisma.user.delete({ where: { id } })
+        await this.repository.delete(id)
     }
 
     async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-        return await this.prisma.user.update({
-            where: { id },
-            data: updateUserDto
-        })
+        return await this.repository.update(id, updateUserDto)
     }
 }

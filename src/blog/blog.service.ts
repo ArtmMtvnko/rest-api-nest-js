@@ -2,36 +2,33 @@ import { Injectable } from '@nestjs/common'
 import { Blog } from './entities/blog.entity'
 import { CreateBlogDto } from './dto/create-blog.dto'
 import { UpdateBlogDto } from './dto/update-blog.dto'
-import { PrismaService } from 'src/prisma.service'
+import { BlogRepository } from './blog.repository'
 
 @Injectable()
 export class BlogService {
-    private readonly prisma: PrismaService
+    private readonly repository: BlogRepository
 
-    constructor(prisma: PrismaService) {
-        this.prisma = prisma
+    constructor(repository: BlogRepository) {
+        this.repository = repository
     }
 
     async findAll(): Promise<Blog[]> {
-        return await this.prisma.blog.findMany()
+        return await this.repository.findAll()
     }
 
     async findUnique(id: string): Promise<Blog | null> {
-        return await this.prisma.blog.findUnique({ where: { id } })
+        return await this.repository.findUnique(id)
     }
 
     async create(createBlogDto: CreateBlogDto): Promise<Blog> {
-        return await this.prisma.blog.create({ data: createBlogDto })
+        return await this.repository.create(createBlogDto)
     }
 
     async delete(id: string): Promise<void> {
-        await this.prisma.blog.delete({ where: { id } })
+        await this.repository.delete(id)
     }
 
     async update(id: string, updateBlogDto: UpdateBlogDto): Promise<Blog> {
-        return await this.prisma.blog.update({
-            where: { id },
-            data: updateBlogDto,
-        })
+        return await this.repository.update(id, updateBlogDto)
     }
 }
