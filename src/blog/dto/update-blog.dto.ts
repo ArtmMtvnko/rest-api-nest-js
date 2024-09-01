@@ -1,6 +1,8 @@
 import { OmitType, PartialType } from '@nestjs/mapped-types'
 import { CreateBlogDto } from './create-blog.dto'
 import { ApiProperty } from '@nestjs/swagger'
+import { IsInt, IsNotEmpty, IsOptional, IsPositive, IsString } from 'class-validator'
+import { Transform } from 'class-transformer'
 
 export class UpdateBlogDto extends OmitType(PartialType(CreateBlogDto), ['authorId']) {
     @ApiProperty({
@@ -8,6 +10,10 @@ export class UpdateBlogDto extends OmitType(PartialType(CreateBlogDto), ['author
         example: 'Vacation in Italy',
         required: false
     })
+    @IsString()
+    @Transform(({ value }) => value.trim())
+    @IsNotEmpty()
+    @IsOptional()
     title?: string
 
     @ApiProperty({
@@ -15,6 +21,9 @@ export class UpdateBlogDto extends OmitType(PartialType(CreateBlogDto), ['author
         example: 'Today, I am going to share with you about my recent experience in Italy',
         required: false
     })
+    @IsString()
+    @Transform(({ value }) => value.trim())
+    @IsOptional()
     content?: string
     
     @ApiProperty({
@@ -22,5 +31,8 @@ export class UpdateBlogDto extends OmitType(PartialType(CreateBlogDto), ['author
         example: '10',
         required: false
     })
+    @IsInt()
+    @IsPositive()
+    @IsOptional()
     likes?: number
 }

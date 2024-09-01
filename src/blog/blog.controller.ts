@@ -10,7 +10,6 @@ import {
     Put,
 } from '@nestjs/common'
 import { BlogService } from './blog.service'
-import { UUID } from 'crypto'
 import { Blog } from './entities/blog.entity'
 import { CreateBlogDto } from './dto/create-blog.dto'
 import { UpdateBlogDto } from './dto/update-blog.dto'
@@ -32,7 +31,7 @@ export class BlogController {
 
     @Get(':id')
     @ApiParam({ name: 'id', example: '1d5ec66c-3a99-4647-8b8d-951544a5471e' })
-    async findUnique(@Param('id') id: UUID): Promise<Blog> {
+    async findUnique(@Param('id') id: string): Promise<Blog> {
         const blog = await this.blogService.findUnique(id)
 
         if (!blog) {
