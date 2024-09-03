@@ -5,6 +5,5 @@
     "swagger": true,
     "exceptionFilter": true,
     "logger": true,
-    "cache": true,
     "port": 3000
 }

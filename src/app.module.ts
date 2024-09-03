@@ -3,7 +3,7 @@ import { AppController } from './app.controller'
 import { BlogModule } from './blog/blog.module'
 import { UserModule } from './user/user.module'
 import { LoggerMiddleware } from './utils/middleware/logger.middleware'
-import * as appConfig from './app.config.json'
+import { configuration } from './config/app.config'
 
 @Module({
     imports: [BlogModule, UserModule],
@@ -12,7 +12,7 @@ import * as appConfig from './app.config.json'
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
-        if (appConfig.logger) {
+        if (configuration.logger) {
             consumer
                 .apply(LoggerMiddleware)
                 .forRoutes('*')

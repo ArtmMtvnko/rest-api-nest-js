@@ -3,14 +3,14 @@ import { AppModule } from './app.module'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { ValidationPipe } from '@nestjs/common'
 import { HttpExceptionFilter } from './utils/filters/http-exception.filter'
-import * as appConfig from './app.config.json'
+import { configuration } from './config/app.config'
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule)
 
-    app.setGlobalPrefix(appConfig.globalPrefix ?? 'api')
+    app.setGlobalPrefix(configuration.globalPrefix)
 
-    if (appConfig.validation) {
+    if (configuration.validation) {
         app.useGlobalPipes(
             new ValidationPipe({
                 transform: true,
@@ -19,15 +19,15 @@ async function bootstrap() {
         )
     }
 
-    if (appConfig.exceptionFilter) {
+    if (configuration.exceptionFilter) {
         app.useGlobalFilters(new HttpExceptionFilter())
     }
 
-    if (appConfig.cors) {
+    if (configuration.cors) {
         app.enableCors()
     }
 
-    if (appConfig.swagger) {
+    if (configuration.swagger) {
         const config = new DocumentBuilder()
             .setTitle('Blogs API')
             .setDescription('Documentation for Blogs application')
@@ -40,7 +40,7 @@ async function bootstrap() {
         SwaggerModule.setup('api', app, document)
     }
 
-    await app.listen(appConfig.port ?? 3000)
+    await app.listen(configuration.port)
     console.log(`Application is running on: ${await app.getUrl()}`)
 }
 bootstrap()
