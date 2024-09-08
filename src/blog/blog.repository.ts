@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma.service'
 import { Blog } from './entities/blog.entity'
 import { CreateBlogDto } from './dto/create-blog.dto'
 import { UpdateBlogDto } from './dto/update-blog.dto'
+import { BlogExtended } from './entities/blog-extended.entity'
 
 @Injectable()
 export class BlogRepository {
@@ -16,8 +17,12 @@ export class BlogRepository {
         return await this.prisma.blog.findMany()
     }
 
-    async findUnique(id: string): Promise<Blog | null> {
-        return await this.prisma.blog.findUnique({ where: { id } })
+    async findUnique(id: string): Promise<BlogExtended | null> {
+        return await this.prisma.blog.findUnique({ 
+            where: { id },
+            include: { author: true }
+        })
+        
     }
 
     async create(createBlogDto: CreateBlogDto): Promise<Blog> {

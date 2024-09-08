@@ -23,6 +23,7 @@ export class UpdateBlogDto extends OmitType(PartialType(CreateBlogDto), ['author
     })
     @IsString()
     @Transform(({ value }) => value.trim())
+    @IsNotEmpty()
     @IsOptional()
     content?: string
     

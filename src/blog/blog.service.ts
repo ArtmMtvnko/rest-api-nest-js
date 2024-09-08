@@ -6,6 +6,7 @@ import { CreateBlogDto } from './dto/create-blog.dto'
 import { UpdateBlogDto } from './dto/update-blog.dto'
 import { BlogRepository } from './blog.repository'
 import { CacheKeys } from 'src/enums/cache.enum'
+import { BlogExtended } from './entities/blog-extended.entity'
 
 @Injectable()
 export class BlogService {
@@ -29,7 +30,7 @@ export class BlogService {
         return cachedBlogs
     }
 
-    async findUnique(id: string): Promise<Blog> {
+    async findUnique(id: string): Promise<BlogExtended> {
         const blog = await this.repository.findUnique(id)
 
         if (!blog) {

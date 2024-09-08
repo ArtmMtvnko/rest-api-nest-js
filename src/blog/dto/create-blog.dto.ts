@@ -20,6 +20,7 @@ export class CreateBlogDto implements Omit<Blog, 'id' | 'authorId' | 'likes'> {
         required: true
     })
     @IsString()
+    @IsNotEmpty()
     content: string
 
     @ApiProperty({
