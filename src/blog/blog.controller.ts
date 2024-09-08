@@ -13,6 +13,7 @@ import { Blog } from './entities/blog.entity'
 import { CreateBlogDto } from './dto/create-blog.dto'
 import { UpdateBlogDto } from './dto/update-blog.dto'
 import { ApiParam, ApiTags } from '@nestjs/swagger'
+import { BlogExtended } from './entities/blog-extended.entity'
 
 @Controller('blogs')
 @ApiTags('Blogs')
@@ -30,8 +31,8 @@ export class BlogController {
 
     @Get(':id')
     @ApiParam({ name: 'id', example: '1d5ec66c-3a99-4647-8b8d-951544a5471e' })
-    async findUnique(@Param('id') id: string): Promise<Blog> {
-        return await this.blogService.findUnique(id)
+    async findUnique(@Param('id') id: string): Promise<BlogExtended> {
+        return await this.blogService.findUnique(id)        
     }
 
     @Post()
