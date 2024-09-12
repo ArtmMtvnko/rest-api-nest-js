@@ -1,10 +1,10 @@
-import { PartialType } from '@nestjs/mapped-types'
+import { PartialType, OmitType } from '@nestjs/mapped-types'
 import { CreateUserDto } from './create-user.dto'
 import { ApiProperty } from '@nestjs/swagger'
 import { IsNotEmpty, IsOptional, IsString, Validate, ValidateBy } from 'class-validator'
 import { Transform } from 'class-transformer'
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {
+export class UpdateUserDto extends OmitType(PartialType(CreateUserDto), ['password']) {
     @ApiProperty({
         description: 'Username which identifies user',
         example: 'jhon_sm1th',

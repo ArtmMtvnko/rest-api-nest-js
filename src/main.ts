@@ -34,6 +34,7 @@ async function bootstrap() {
             .setVersion('1.0')
             .addTag('Blogs')
             .addTag('Users')
+            .addTag('Login')
             .build()
     
         const document = SwaggerModule.createDocument(app, config)

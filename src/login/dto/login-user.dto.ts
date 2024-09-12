@@ -1,13 +1,13 @@
-import { IsNotEmpty, IsString } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
-import { User } from '../entities/user.entity'
+import { IsString, IsNotEmpty } from 'class-validator'
+import { User } from 'src/user/entities/user.entity'
 import { Transform } from 'class-transformer'
 
-export class CreateUserDto implements Omit<User, 'id'> {
+export class LoginUserDto implements Omit<User, 'id' | 'name'> {
     @ApiProperty({
         description: 'Username which identifies user',
         example: 'jhon_jhonshon42',
-        required: true
+        required: true,
     })
     @IsString()
     @Transform(({ value }) => value.trim())
@@ -17,20 +17,10 @@ export class CreateUserDto implements Omit<User, 'id'> {
     @ApiProperty({
         description: 'Password for account',
         example: 'jhonshon123!',
-        required: true
+        required: true,
     })
     @IsString()
     @Transform(({ value }) => value.trim())
     @IsNotEmpty()
     password: string
-
-    @ApiProperty({
-        description: 'Name which is shown for other people',
-        example: 'Jhon Jhonshon',
-        required: true
-    })
-    @IsString()
-    @Transform(({ value }) => value.trim())
-    @IsNotEmpty()
-    name: string
 }

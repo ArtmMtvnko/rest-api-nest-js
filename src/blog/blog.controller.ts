@@ -7,6 +7,7 @@ import {
     Param,
     Post,
     Put,
+    UseGuards,
 } from '@nestjs/common'
 import { BlogService } from './blog.service'
 import { Blog } from './entities/blog.entity'
@@ -14,9 +15,11 @@ import { CreateBlogDto } from './dto/create-blog.dto'
 import { UpdateBlogDto } from './dto/update-blog.dto'
 import { ApiParam, ApiTags } from '@nestjs/swagger'
 import { BlogExtended } from './entities/blog-extended.entity'
+import { AuthGuard } from 'src/utils/guards/auth.guard'
 
 @Controller('blogs')
 @ApiTags('Blogs')
+@UseGuards(AuthGuard)
 export class BlogController {
     private readonly blogService: BlogService
 

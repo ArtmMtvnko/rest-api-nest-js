@@ -3,13 +3,16 @@ import { User } from './entities/user.entity'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UserRepository } from './user.repository'
+import { BcryptService } from 'src/services/bcrypt.service'
 
 @Injectable()
 export class UserService {
     private readonly repository: UserRepository
+    private readonly bcryptService: BcryptService
 
-    constructor(repository: UserRepository) {
+    constructor(repository: UserRepository, bcryptService: BcryptService) {
         this.repository = repository
+        this.bcryptService = bcryptService
     }
     
     async findAll(): Promise<User[]> {
@@ -27,7 +30,12 @@ export class UserService {
     }
 
     async create(createUserDto: CreateUserDto): Promise<User> {
-        return await this.repository.create(createUserDto)
+        const passwordHash = await this.bcryptService.hashPassword(createUserDto.password)
+        
+        return await this.repository.create({
+            ...createUserDto,
+            password: passwordHash
+        })
     }
 
     async delete(id: string): Promise<void> {

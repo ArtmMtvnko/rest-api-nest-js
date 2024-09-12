@@ -5,7 +5,7 @@ class UsersStorage {
         {
             id: '7957d287-e4ec-472e-938a-a69a4bbfa288',
             username: 'test_teston123',
-            name: 'Test Teston',
+            name: 'Test Teston'
         },
         {
             id: '9173ccac-7a49-40d8-8bb5-6bbbf9b78960',

@@ -1,3 +1,3 @@
 import { User as UserPrisma } from '@prisma/client'
 
-export interface User extends UserPrisma {}
+export interface User extends Omit<UserPrisma, 'password'> {}
